@@ -46,7 +46,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.productCard}
-                        onPress={() => navigation.replace("ProductDetail", item)} 
+                        onPress={() => navigation.push("ProductDetail", item)}
                     >
                         <Image source={{ uri: item.image }} style={styles.productImage} />
                         <View style={styles.productDetails}>

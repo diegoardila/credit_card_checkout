@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 interface Product {
     id: number;
@@ -47,7 +46,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.productCard}
-                        onPress={() => navigation.replace("ProductDetail", item)} 
+                        onPress={() => navigation.push("ProductDetail", item)} 
                     >
                         <Image source={{ uri: item.image }} style={styles.productImage} />
                         <View style={styles.productDetails}>

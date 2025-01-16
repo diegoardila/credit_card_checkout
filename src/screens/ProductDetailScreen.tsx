@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Button, Alert } from 'react-native';
-import { Cart } from '../store/cart';
+import {addToCart} from '../reducers/cart';
+import {useDispatch} from "react-redux";
 
 interface ProductDetailScreenProps {
     route: {
@@ -16,11 +17,11 @@ interface ProductDetailScreenProps {
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({ route, navigation }: any) => {
     const { id, title, price, description, image } = route.params;
+    const dispatch = useDispatch();
 
     const handleAddToCart = async () => {
-        await Cart.addToCart({ id, title, price, description, image, qty: 0});
-        Alert.alert('Success', 'Product added to cart!', [{ text: 'OK', onPress: () => navigation.replace('Cart') }]);
-
+        dispatch(addToCart({id, title, price, description, image, qty: 1}));
+        //Alert.alert('Success', 'Product added to cart!', [{ text: 'OK', onPress: () => navigation.replace('Cart') }]);
     };
 
     return (
