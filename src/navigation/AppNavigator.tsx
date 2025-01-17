@@ -8,6 +8,7 @@ import CartScreen from "../screens/CartScreen";
 import {Button, ToastAndroid} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
+import AddCardScreen from "../screens/CardScreen";
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,8 @@ const AppNavigator: React.FC = () => {
                               component={ProductDetailScreen}
                               options={{title: 'Product Detail'}}/>
                 <Stack.Screen name="Cart" component={CartScreen}/>
+                <Stack.Screen name="Card" component={AddCardScreen}
+                              initialParams={{totalAmount: 0}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

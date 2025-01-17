@@ -52,7 +52,7 @@ const CartScreen: React.FC = ({navigation}: any) => {
                     style={styles.title}>Total a pagar:
                     ${cartTotal.toFixed(2)}</Text>
                 <Button title="Go to payment"
-                        onPress={() => navigation.replace('Payment')}
+                        onPress={() => navigation.push('Card', {totalAmount: cartTotal})}
                         disabled={cartItems.length === 0}/>
                 <Button
                     title="Clear Cart" onPress={handleClearCart}/>
