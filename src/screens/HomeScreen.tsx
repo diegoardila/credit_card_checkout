@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+    View,
+    Text,
+    FlatList,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    ActivityIndicator
+} from 'react-native';
+import typography from "../config/typography";
+import colors from "../config/theme";
+import SplashScreen from "./SplashScreen";
 
 interface Product {
     id: number;
@@ -9,7 +20,7 @@ interface Product {
     image: string;
 }
 
-const HomeScreen: React.FC = ({ navigation }: any) => {
+const HomeScreen: React.FC = ({navigation}: any) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -31,27 +42,29 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
 
     if (loading) {
         return (
-            <View style={styles.loaderContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
+            <SplashScreen/>
         );
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Product List</Text>
             <FlatList
+                style={{paddingVertical: 20}}
                 data={products}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                     <TouchableOpacity
                         style={styles.productCard}
-                        onPress={() => navigation.push("ProductDetail", item)}
-                    >
-                        <Image source={{ uri: item.image }} style={styles.productImage} />
+                        onPress={() => navigation.push("ProductDetail", item)}>
+                        <View style={styles.imageContainer}>
+                            <Image source={{uri: item.image}}
+                                   style={styles.productImage}/>
+                        </View>
                         <View style={styles.productDetails}>
-                            <Text style={styles.productTitle}>{item.title}</Text>
-                            <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
+                            <Text
+                                style={[typography.textSemiBold1, styles.productTitle]}>{item.title}</Text>
+                            <Text
+                                style={[typography.textMedium0, styles.productPrice]}>${item.price.toFixed(2)}</Text>
                         </View>
                     </TouchableOpacity>
                 )}
@@ -64,14 +77,8 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginVertical: 20,
-        color: '#333',
+        backgroundColor: colors.background,
+        color: colors.textPrimary
     },
     loaderContainer: {
         flex: 1,
@@ -83,34 +90,47 @@ const styles = StyleSheet.create({
     },
     productCard: {
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        alignItems: 'center',
+        backgroundColor: '#333',
         borderRadius: 8,
-        padding: 10,
-        marginBottom: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginBottom: 15,
         elevation: 2,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowRadius: 4,
     },
-    productImage: {
+    imageContainer: {
         width: 60,
         height: 60,
         borderRadius: 8,
         marginRight: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: {width: 0, height: 2},
+        shadowRadius: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        overflow: 'hidden',
+    },
+    productImage: {
+        width: '100%',
+        height: undefined,
+        aspectRatio: 1,
     },
     productDetails: {
         flex: 1,
         justifyContent: 'center',
     },
     productTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
+        color: colors.textPrimary
     },
     productPrice: {
         fontSize: 14,
-        color: '#888',
+        color: colors.secondary,
         marginTop: 5,
     },
 });

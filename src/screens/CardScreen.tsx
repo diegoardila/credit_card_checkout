@@ -6,8 +6,11 @@ import {
     Text,
     Image,
     Button,
-    Modal, TouchableOpacity
+    Modal, TouchableOpacity, ScrollView
 } from 'react-native';
+import colors from "../config/theme";
+import CCInput from "../components/input";
+import CCButton from "../components/button";
 
 const CARD_ICONS: Record<string, any> = {
     visa: require('../../assets/visa.png'),
@@ -64,14 +67,10 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route}) => {
         }
     };
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Total Amount:
-                ${totalAmount.toFixed(2)}</Text>
-
+        <ScrollView style={styles.container}>
             <Text style={styles.label}>Card Number</Text>
             <View style={styles.cardInputContainer}>
-                <TextInput
-                    style={styles.input}
+                <CCInput
                     value={cardNumber}
                     onChangeText={(text) => setCardNumber(formatCardNumber(text))}
                     keyboardType="numeric"
@@ -85,8 +84,7 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route}) => {
             </View>
 
             <Text style={styles.label}>Expiration Date</Text>
-            <TextInput
-                style={styles.input}
+            <CCInput
                 value={expirationDate}
                 onChangeText={(text) => formatExpirationDate(text)}
                 keyboardType="numeric"
@@ -94,16 +92,18 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route}) => {
                 maxLength={5}
             />
             <Text style={styles.label}>CVV</Text>
-            <TextInput
-                style={styles.input}
+            <CCInput
                 value={cvv}
                 onChangeText={(text) => setCvvValue(text)}
                 keyboardType="numeric"
                 placeholder="123"
                 maxLength={3}
             />
-            <Button
-                title="Complete payment with card data" onPress={toggleModal}/>
+            <Text style={styles.total}>Total Amount:
+                ${totalAmount.toFixed(2)}</Text>
+            <CCButton
+                title="Complete payment with card data" type='primary'
+                onPress={toggleModal}/>
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -122,43 +122,43 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route}) => {
                         <Text style={styles.modalText}>
                             Total Amount: ${totalAmount.toFixed(2)}
                         </Text>
-                        <View style={{flexDirection: 'row', gap: 10}}>
-                            <TouchableOpacity style={styles.closeButton}
-                                              onPress={toggleModal}>
-                                <Text
-                                    style={styles.closeButtonText}>Close</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.closeButton}
-                                              onPress={toggleModal}>
-                                <Text style={styles.closeButtonText}>Pay</Text>
-                            </TouchableOpacity>
+                        <View style={{
+                            flexDirection: 'row',
+                            gap: 10,
+                            marginTop: 20,
+                            paddingHorizontal: 20,
+                            paddingBottom: 20
+                        }}>
+                            <CCButton type='secondary' style={{flex: 1}}
+                                      textStyle={{color: colors.primary}}
+                                      title="Close" onPress={toggleModal}/>
+                            <CCButton type='primary' style={{flex: 1}}
+                                      title="Pay" onPress={toggleModal}/>
                         </View>
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
+        paddingVertical: 16,
+        backgroundColor: colors.background,
     },
     label: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontFamily: 'poppins-semibold',
+        color: colors.textPrimary,
         marginBottom: 8,
     },
-    input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingHorizontal: 16,
-        fontSize: 16,
-        marginBottom: 16,
+    total: {
+        fontFamily: 'poppins-semibold',
+        color: colors.secondary,
+        fontSize: 18,
+        paddingBottom: 16,
+        textAlign: 'center',
     },
     cardIcon: {
         width: 40,
@@ -181,18 +181,25 @@ const styles = StyleSheet.create({
     modalContainer: {
         width: '80%',
         backgroundColor: '#fff',
-        padding: 20,
         borderRadius: 8,
         alignItems: 'center',
+        overflow: 'hidden',
     },
     modalTitle: {
+        width: '100%',
+        padding: 20,
+        textAlign: 'center',
+        backgroundColor: colors.primary,
+        color: colors.textPrimary,
+        fontFamily: 'poppins-semibold',
         fontSize: 18,
-        fontWeight: 'bold',
         marginBottom: 20,
+        elevation: 3,
     },
     modalText: {
-        fontSize: 16,
-        marginBottom: 10,
+        fontFamily: 'poppins-regular',
+        fontSize: 14,
+        marginBottom: 8,
     },
     closeButton: {
         flex: 1,

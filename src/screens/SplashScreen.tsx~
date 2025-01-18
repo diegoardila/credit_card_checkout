@@ -78,7 +78,7 @@ const SplashScreen: React.FC = ({
             dispatch(setConnectionStatus(state.isConnected));
             navigation.replace(state.isConnected ? 'Home' : 'NoConnection');
         };
-        if (fontsLoaded) {
+        if (false) {
             checkConnection();
         }
     }, [fontsLoaded, dispatch, navigation]);

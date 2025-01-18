@@ -35,9 +35,9 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({route}: any) =
     const [qty, setQty] = useState(1);
 
     const handleAddToCart = async () => {
-        dispatch(addToCart({id, title, price, description, image, qty: qty}));
+        dispatch(addToCart({id, title, price, description, image, qty: 1}));
         showAlert({
-            message: 'Product ' + title + ' added ' + qty + ' times to cart',
+            message: 'Product ' + title + ' added to cart',
             type: 'success'
         })
     };

@@ -12,6 +12,10 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
 import {clearCart, removeFromCart} from "../reducers/cart";
+import colors from "../config/theme";
+import typography from "../config/typography";
+import CCButton from "../components/button";
+import {AntDesign} from "@expo/vector-icons";
 
 const CartScreen: React.FC = ({navigation}: any) => {
     const dispatch = useDispatch();
@@ -33,29 +37,40 @@ const CartScreen: React.FC = ({navigation}: any) => {
                     <View style={styles.item}>
                         <Image source={{uri: item.image}}
                                style={styles.productImage}/>
-                        <View style={{flexDirection: 'column', width: '70%'}}>
-                            <Text style={styles.title}>{item.title}</Text>
+                        <View style={{flexDirection: 'column', flex: 1}}>
                             <Text
-                                style={styles.price}>${item.price.toFixed(2)}</Text>
+                                style={[typography.textMedium1, styles.title]}>{item.title}</Text>
                             <Text
-                                style={styles.title}>Cantidad: {item.qty}</Text>
+                                style={[typography.text1, styles.price]}>${item.price.toFixed(2)}</Text>
+                            <Text
+                                style={[typography.text1, styles.qty]}>Cantidad: {item.qty}</Text>
                         </View>
                         <Pressable
-                            onPress={() => handleRemoveItemFromCart(item.id)}><Text
-                            style={styles.title}>X</Text></Pressable>
+                            onPress={() => handleRemoveItemFromCart(item.id)}>
+                            <AntDesign
+                            name="closecircle" size={20}
+                            color="white"/>
+                        </Pressable>
                     </View>
                 )}
             />
 
             {cartItems.length > 0 ? (<View>
                 <Text
-                    style={styles.title}>Total a pagar:
+                    style={[typography.textSemiBold1, {
+                        color: colors.primary,
+                        textAlign: 'center'
+                    }]}>
+                    Total:
                     ${cartTotal.toFixed(2)}</Text>
-                <Button title="Go to payment"
-                        onPress={() => navigation.push('Card', {cartTotal})}
-                        disabled={cartItems.length === 0}/>
-                <Button
-                    title="Clear Cart" onPress={handleClearCart}/>
+                <CCButton title="Pay with credit card"
+                          type="primary"
+                          onPress={() => navigation.push('Card', {totalAmount: cartTotal})}
+                          disabled={cartItems.length === 0}
+                          style={{marginBottom: 10}}/>
+                <CCButton
+                    title="Clear Cart" type='secondary'
+                    onPress={handleClearCart}/>
             </View>) : null}
         </View>
     );
@@ -69,8 +84,8 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
+        backgroundColor: colors.background,
+        paddingBottom: 8
     },
     header: {
         fontSize: 24,
@@ -80,17 +95,21 @@ const styles = StyleSheet.create({
     item: {
         display: 'flex',
         flexDirection: 'row',
+        flex: 1,
         gap: 10,
-        padding: 16,
+        paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
     title: {
-        fontSize: 18,
+        color: colors.textPrimary,
+    },
+    qty: {
+        color: colors.textPrimary,
+        fontSize: 14
     },
     price: {
-        fontSize: 16,
-        color: '#4CAF50',
+        color: colors.primary,
     },
 });
 
