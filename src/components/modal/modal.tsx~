@@ -1,0 +1,107 @@
+import {Modal, StyleSheet, Text, View} from "react-native";
+import CCButton from "./button";
+import colors from "../config/theme";
+import React from "react";
+
+interface Card {
+    cardType: string;
+    cardNumber: string;
+    expirationDate: string;
+    installments: number;
+    totalAmount: number;
+}
+interface CCModalProps {
+    onPrimaryPress: () => void;
+    onSecondaryPress: () => void;
+    isModalVisible: boolean;
+    toggleModal: () => void;
+    card: Card;
+}
+
+const CCModal:React.FC<CCModalProps> = ({onPrimaryPress, onSecondaryPress, isModalVisible, toggleModal, card}) => {
+
+    return(<Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={toggleModal}
+    >
+        <View style={styles.modalBackdrop}>
+            <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Payment
+                    Summary</Text>
+                <Text style={styles.modalText}>Card
+                    Type: {card.cardType.replace(/^\w/, (c) => c.toUpperCase()) || 'N/A'}</Text>
+                <Text style={styles.modalText}>Card
+                    Number: {card.cardNumber}</Text>
+                <Text style={styles.modalText}>Expiration
+                    Date: {card.expirationDate}</Text>
+                <Text
+                    style={styles.modalText}>Installments: {card.installments}</Text>
+                <Text style={styles.modalText}>
+                    Total Amount: ${card.totalAmount.toFixed(2)}
+                </Text>
+                <View style={{
+                    flexDirection: 'row',
+                    gap: 10,
+                    marginTop: 20,
+                    paddingHorizontal: 20,
+                    paddingBottom: 20
+                }}>
+                    <CCButton type='secondary' style={{flex: 1}}
+                              textStyle={{color: colors.primary}}
+                              title="Close" onPress={onSecondaryPress}/>
+                    <CCButton type='primary' style={{flex: 1}}
+                              title="Pay"
+                              onPress={onPrimaryPress}/>
+                </View>
+            </View>
+        </View>
+    </Modal>
+    );
+}
+const styles = StyleSheet.create({
+
+    modalBackdrop: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContainer: {
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        alignItems: 'center',
+        overflow: 'hidden',
+    },
+    modalTitle: {
+        width: '100%',
+        padding: 20,
+        textAlign: 'center',
+        backgroundColor: colors.primary,
+        color: colors.textPrimary,
+        fontFamily: 'poppins-semibold',
+        fontSize: 18,
+        marginBottom: 20,
+        elevation: 3,
+    },
+    modalText: {
+        fontFamily: 'poppins-regular',
+        fontSize: 14,
+        marginBottom: 8,
+    },
+    closeButton: {
+        flex: 1,
+        backgroundColor: '#ff4444',
+        padding: 10,
+        borderRadius: 8,
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+});
+export default CCModal;

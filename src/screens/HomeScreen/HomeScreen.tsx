@@ -4,25 +4,18 @@ import {
     Text,
     FlatList,
     Image,
-    StyleSheet,
-    TouchableOpacity,
-    ActivityIndicator
+    TouchableOpacity
 } from 'react-native';
-import typography from "../config/typography";
-import colors from "../config/theme";
-import SplashScreen from "./SplashScreen";
-
-interface Product {
-    id: number;
-    title: string;
-    price: number;
-    description: string;
-    image: string;
-}
+import typography from "../../config/typography";
+import styles from "./HomeScreen.styles";
+import SplashScreen from "../SplashScreen/SplashScreen";
+import {useAlert} from "../../components/alert/alert";
+import {Product} from "./HomeScreen.types";
 
 const HomeScreen: React.FC = ({navigation}: any) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const {showAlert} = useAlert();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -31,7 +24,10 @@ const HomeScreen: React.FC = ({navigation}: any) => {
                 const data = await response.json();
                 setProducts(data);
             } catch (error) {
-                console.error('Error fetching products:', error);
+                showAlert({
+                    message: "Error fetching products",
+                    type: "error"
+                });
             } finally {
                 setLoading(false);
             }
@@ -74,64 +70,5 @@ const HomeScreen: React.FC = ({navigation}: any) => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.background,
-        color: colors.textPrimary
-    },
-    loaderContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    listContainer: {
-        paddingHorizontal: 10,
-    },
-    productCard: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#333',
-        borderRadius: 8,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        marginBottom: 15,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 4,
-    },
-    imageContainer: {
-        width: 60,
-        height: 60,
-        borderRadius: 8,
-        marginRight: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 4,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-    },
-    productImage: {
-        width: '100%',
-        height: undefined,
-        aspectRatio: 1,
-    },
-    productDetails: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    productTitle: {
-        color: colors.textPrimary
-    },
-    productPrice: {
-        fontSize: 14,
-        color: colors.secondary,
-        marginTop: 5,
-    },
-});
 
 export default HomeScreen;

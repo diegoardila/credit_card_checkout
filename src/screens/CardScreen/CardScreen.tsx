@@ -1,55 +1,30 @@
 import React, {useState} from 'react';
 import {
     View,
-    TextInput,
-    StyleSheet,
     Text,
     Image,
-    Button,
-    Modal, TouchableOpacity, ScrollView, Pressable
+    ScrollView,
+    Pressable
 } from 'react-native';
-import colors from "../config/theme";
-import CCInput from "../components/input";
-import CCButton from "../components/button";
-import CCNumberSelector from "../components/numberSelector";
-import {useAlert} from "../components/alert";
+import CCInput from "../../components/input/input";
+import CCButton from "../../components/button/button";
+import CCNumberSelector from "../../components/numberSelector/numberSelector";
+import {useAlert} from "../../components/alert/alert";
 import {Entypo} from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {encodeJWT} from "../utils/jwt";
-import SplashScreen from "./SplashScreen";
+import {encodeJWT} from "../../utils/jwt";
+import SplashScreen from "../SplashScreen/SplashScreen";
 import {useDispatch} from "react-redux";
-import {clearCart} from "../reducers/cart";
+import {clearCart} from "../../reducers/cart";
+import CCModal from "../../components/modal/modal";
+import styles from "./CardScreen.styles";
+import {CardScreenProps} from "./CardScreen.types";
 
 const CARD_ICONS: Record<string, any> = {
-    visa: require('../../assets/visa.png'),
-    mastercard: require('../../assets/mastercard.png'),
-    amex: require('../../assets/amex.png'),
+    visa: require('../../../assets/visa.png'),
+    mastercard: require('../../../assets/mastercard.png'),
+    amex: require('../../../assets/amex.png'),
 };
-
-const getCardType = (cardNumber: string) => {
-    if (/^4[0-9]{0,}$/.test(cardNumber)) return 'visa';
-    if (/^5[1-5][0-9]{0,}$/.test(cardNumber)) return 'mastercard';
-    if (/^3[47][0-9]{0,}$/.test(cardNumber)) return 'amex';
-    return '';
-};
-
-const formatCardNumber = (value: string) => {
-    return value
-        .replace(/\D/g, '')
-        .replace(/(.{4})/g, '$1 ')
-        .trim()
-        .slice(0, 19);
-};
-
-
-interface CardScreenProps {
-    route: {
-        params: {
-            totalAmount: number
-        };
-    };
-}
-
 
 const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
     const [cardNumber, setCardNumber] = useState('');
@@ -63,6 +38,21 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
     const CARD_KEY = 'credit_card';
     const {showAlert} = useAlert();
     const dispatch = useDispatch();
+
+    const getCardType = (cardNumber: string) => {
+        if (/^4[0-9]{0,}$/.test(cardNumber)) return 'visa';
+        if (/^5[1-5][0-9]{0,}$/.test(cardNumber)) return 'mastercard';
+        if (/^3[47][0-9]{0,}$/.test(cardNumber)) return 'amex';
+        return '';
+    };
+
+    const formatCardNumber = (value: string) => {
+        return value
+            .replace(/\D/g, '')
+            .replace(/(.{4})/g, '$1 ')
+            .trim()
+            .slice(0, 19);
+    };
 
     const cardType = getCardType(cardNumber.replace(/\s/g, ''));
 
@@ -192,140 +182,17 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
             <CCButton
                 title="Complete payment with card data" type='primary'
                 onPress={() => validateForm('modal')}/>
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isModalVisible}
-                onRequestClose={toggleModal}
-            >
-                <View style={styles.modalBackdrop}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>Payment
-                            Summary</Text>
-                        <Text style={styles.modalText}>Card
-                            Type: {cardType.replace(/^\w/, (c) => c.toUpperCase()) || 'N/A'}</Text>
-                        <Text style={styles.modalText}>Card
-                            Number: {cardNumber}</Text>
-                        <Text style={styles.modalText}>Expiration
-                            Date: {expirationDate}</Text>
-                        <Text
-                            style={styles.modalText}>Installments: {installments}</Text>
-                        <Text style={styles.modalText}>
-                            Total Amount: ${totalAmount.toFixed(2)}
-                        </Text>
-                        <View style={{
-                            flexDirection: 'row',
-                            gap: 10,
-                            marginTop: 20,
-                            paddingHorizontal: 20,
-                            paddingBottom: 20
-                        }}>
-                            <CCButton type='secondary' style={{flex: 1}}
-                                      textStyle={{color: colors.primary}}
-                                      title="Close" onPress={toggleModal}/>
-                            <CCButton type='primary' style={{flex: 1}}
-                                      title="Pay"
-                                      onPress={() => validateForm('')}/>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
+            <CCModal onPrimaryPress={() => validateForm('')}
+                     onSecondaryPress={toggleModal}
+                     isModalVisible={isModalVisible} toggleModal={toggleModal}
+                     card={{
+                         cardNumber: cardNumber,
+                         expirationDate: expirationDate,
+                         installments: installments,
+                         cardType: cardType,
+                         totalAmount: totalAmount
+                     }}/>
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingVertical: 16,
-        backgroundColor: colors.background,
-    },
-    label: {
-        fontFamily: 'poppins-semibold',
-        color: colors.textPrimary,
-        marginBottom: 8,
-    },
-    total: {
-        fontFamily: 'poppins-semibold',
-        color: colors.secondary,
-        fontSize: 18,
-        paddingBottom: 16,
-        textAlign: 'center',
-    },
-    cardIcon: {
-        width: 40,
-        height: 25,
-        marginLeft: 8,
-        position: 'absolute',
-        right: 8,
-        top: 12,
-    },
-    cardInputContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    modalBackdrop: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContainer: {
-        width: '80%',
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        alignItems: 'center',
-        overflow: 'hidden',
-    },
-    modalTitle: {
-        width: '100%',
-        padding: 20,
-        textAlign: 'center',
-        backgroundColor: colors.primary,
-        color: colors.textPrimary,
-        fontFamily: 'poppins-semibold',
-        fontSize: 18,
-        marginBottom: 20,
-        elevation: 3,
-    },
-    modalText: {
-        fontFamily: 'poppins-regular',
-        fontSize: 14,
-        marginBottom: 8,
-    },
-    closeButton: {
-        flex: 1,
-        backgroundColor: '#ff4444',
-        padding: 10,
-        borderRadius: 8,
-        marginTop: 20,
-        alignItems: 'center',
-    },
-    closeButtonText: {
-        color: '#fff',
-        fontSize: 16,
-    },
-    checkboxContainer: {
-        flexDirection: 'row',
-
-        alignItems: 'center',
-        gap: 10
-    },
-    checkbox: {
-        alignSelf: 'center',
-        width: 20,
-        height: 20,
-        borderRadius: 4,
-        borderWidth: 2,
-        borderColor: colors.primary,
-        marginBottom: 10,
-    },
-    checked: {
-        backgroundColor: colors.primary,
-    },
-    unchecked: {
-        backgroundColor: 'transparent',
-    },
-});
-
 export default AddCardScreen;

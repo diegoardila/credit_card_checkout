@@ -1,0 +1,91 @@
+import React, {useState} from 'react';
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    Button,
+    Alert,
+    Pressable, ScrollView
+} from 'react-native';
+import {addToCart} from '../reducers/cart';
+import {useDispatch} from "react-redux";
+import colors from "../config/theme";
+import typography from "../config/typography";
+import CCButton from "../components/button";
+import {useAlert} from "../components/alert";
+import {AntDesign} from "@expo/vector-icons";
+import CCNumberSelector from "../components/numberSelector";
+
+interface ProductDetailScreenProps {
+    route: {
+        params: {
+            id: number;
+            title: string;
+            price: number;
+            description: string;
+            image: string;
+        };
+    };
+}
+
+const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({route}: any) => {
+    const {id, title, price, description, image} = route.params;
+    const dispatch = useDispatch();
+    const {showAlert} = useAlert();
+    const [qty, setQty] = useState(1);
+
+    const handleAddToCart = async () => {
+        dispatch(addToCart({id, title, price, description, image, qty: qty}));
+        showAlert({
+            message: 'Product ' + title + ' added ' + qty + ' times to cart',
+            type: 'success'
+        })
+    };
+
+    return (
+        <ScrollView style={styles.container}>
+            <Image source={{uri: image}} style={styles.image}/>
+            <Text
+                style={[typography.textSemiBold1, styles.title]}>{title}</Text>
+            <Text
+                style={[typography.textMedium1, styles.price]}>${price.toFixed(2)}</Text>
+            <Text
+                style={[typography.text0, styles.description]}>{description}</Text>
+            <CCNumberSelector value={qty} onChangeValue={setQty}/>
+            <CCButton title="Add to Cart" type="primary"
+                      onPress={handleAddToCart}/>
+        </ScrollView>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: colors.background,
+    },
+    image: {
+        width: '100%',
+        height: 200,
+        resizeMode: 'contain',
+        marginBottom: 16,
+    },
+    title: {
+        fontSize: 20,
+        marginBottom: 8,
+        color: colors.textPrimary,
+    },
+    price: {
+        fontSize: 20,
+        color: colors.secondary,
+        marginBottom: 8,
+    },
+    description: {
+        fontSize: 16,
+        color: '#888',
+        marginBottom: 16,
+    }
+});
+
+export default ProductDetailScreen;

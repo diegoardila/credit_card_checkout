@@ -18,9 +18,6 @@ const initialState: CartState = {
     items: [],
 };
 
-const CART_KEY = 'cart_items';
-const listeners: ((cart: Product[]) => void)[] = [];
-
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
@@ -28,8 +25,8 @@ const cartSlice = createSlice({
         addToCart: (state, action: PayloadAction<Product>) => {
             const existingItem = state.items.find((item) => item.id === action.payload.id);
             if (existingItem) {
-                existingItem.qty++;
-                existingItem.price += action.payload.price * existingItem.qty;
+                existingItem.qty += action.payload.qty;
+                existingItem.price =  action.payload.price * existingItem.qty;
             } else {
                 state.items.push(action.payload);
             }
