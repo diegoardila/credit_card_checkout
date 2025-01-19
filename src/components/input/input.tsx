@@ -1,6 +1,6 @@
 import {TextInput, StyleSheet} from "react-native";
 import React from "react";
-import colors from "../config/theme";
+import colors from "../../config/theme";
 
 const CCInput = ({style={},value,onChangeText,keyboardType,placeholder,maxLength}) => {
     return (

@@ -1,6 +1,6 @@
 import {Pressable, Text} from "react-native";
-import colors from "../config/theme";
-import typography from "../config/typography";
+import colors from "../../config/theme";
+import typography from "../../config/typography";
 
 const CCButton = ({
                       title,

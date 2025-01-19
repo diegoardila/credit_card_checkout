@@ -2,34 +2,31 @@ import React, {useEffect, useRef} from 'react';
 import {
     View,
     Text,
-    StyleSheet,
-    ActivityIndicator,
-    Animated, Easing
+    Animated,
+    Easing
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {useDispatch} from 'react-redux';
-import {setConnectionStatus} from '../actions/connectionActions';
+import {setConnectionStatus} from '../../actions/connectionActions';
 import {useFonts} from "expo-font";
-import colors from "../config/theme";
-import typography from "../config/typography";
+import typography from "../../config/typography";
 import {FontAwesome} from "@expo/vector-icons";
+import styles from "./SpashScreen.styles";
 
-const SplashScreen: React.FC = ({
-                                    navigation
-                                }: any) => {
+const SplashScreen: React.FC = ({navigation}: any) => {
     const [fontsLoaded] = useFonts({
-        'poppins-regular': require('../../assets/fonts/Poppins-Regular.ttf'),
-        'poppins-medium': require('../../assets/fonts/Poppins-Medium.ttf'),
-        'poppins-bold': require('../../assets/fonts/Poppins-Bold.ttf'),
-        'poppins-semibold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
-        'poppins-black': require('../../assets/fonts/Poppins-Black.ttf'),
-        'poppins-italic': require('../../assets/fonts/Poppins-Italic.ttf'),
+        'poppins-regular': require('../../../assets/fonts/Poppins-Regular.ttf'),
+        'poppins-medium': require('../../../assets/fonts/Poppins-Medium.ttf'),
+        'poppins-bold': require('../../../assets/fonts/Poppins-Bold.ttf'),
+        'poppins-semibold': require('../../../assets/fonts/Poppins-SemiBold.ttf'),
+        'poppins-black': require('../../../assets/fonts/Poppins-Black.ttf'),
+        'poppins-italic': require('../../../assets/fonts/Poppins-Italic.ttf'),
     });
     const dispatch = useDispatch();
-
     const positionCurtain = useRef(new Animated.Value(200)).current;
     const positionIcon = useRef(new Animated.Value(-36)).current;
-    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+    const delay =
+        (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
     useEffect(() => {
         Animated.loop(
@@ -46,7 +43,6 @@ const SplashScreen: React.FC = ({
                     useNativeDriver: false
                 }),
             ])
-
         ).start();
     }, [positionCurtain]);
 
@@ -85,55 +81,20 @@ const SplashScreen: React.FC = ({
 
     return (
         <View
-            style={{
-                flex: 1,
-                backgroundColor: colors.background,
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}>
-            <View style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-                gap: 10,
-                justifyContent: 'center',
-            }}>
-                <Animated.View style={{
-                    position: 'absolute',
-                    width: 250,
-                    right: positionCurtain,
-                    height: '100%',
-                    backgroundColor: colors.background,
-                    zIndex: 2
-                }}></Animated.View>
-                <Animated.View style={{
-                    position: 'absolute',
-                    left: positionIcon,
-                    top: 7,
-                    zIndex: 3,
-                }}>
+            style={styles.container}>
+            <View style={styles.row}>
+                <Animated.View
+                    style={[styles.curtain, {right: positionCurtain}]}></Animated.View>
+                <Animated.View style={[styles.icon, {left: positionIcon}]}>
                     <FontAwesome
                         name="credit-card-alt"
                         size={24} color="white"/>
                 </Animated.View>
                 <Text
-                    style={[typography.textBlack2, {
-                        color: colors.textPrimary,
-                    }]}>CreditCard</Text>
+                    style={[typography.textBlack2, styles.title]}>CreditCard</Text>
             </View>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 20,
-        marginBottom: 20,
-    },
-});
 
 export default SplashScreen;

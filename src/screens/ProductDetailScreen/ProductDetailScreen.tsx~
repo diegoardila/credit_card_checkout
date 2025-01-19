@@ -8,13 +8,13 @@ import {
     Alert,
     Pressable, ScrollView
 } from 'react-native';
-import {addToCart} from '../reducers/cart';
+import {addToCart} from '../../reducers/cart';
 import {useDispatch} from "react-redux";
-import colors from "../config/theme";
-import typography from "../config/typography";
-import CCButton from "../components/button";
-import {useAlert} from "../components/alert";
-import {AntDesign} from "@expo/vector-icons";
+import colors from "../../config/theme";
+import typography from "../../config/typography";
+import CCButton from "../../components/button";
+import {useAlert} from "../../components/alert";
+import CCNumberSelector from "../../components/numberSelector";
 
 interface ProductDetailScreenProps {
     route: {
@@ -51,20 +51,7 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({route}: any) =
                 style={[typography.textMedium1, styles.price]}>${price.toFixed(2)}</Text>
             <Text
                 style={[typography.text0, styles.description]}>{description}</Text>
-            <View style={styles.qtyContainer}>
-                <Pressable style={[styles.qtyButton, styles.minus]}
-                           onPress={() => setQty(qty - 1)}>
-                    <AntDesign name="minuscircle" size={18} color="white"/>
-                </Pressable>
-                <View style={styles.qtyValueContainer}>
-                    <Text
-                        style={[typography.textSemiBold1, styles.qty]}>{qty}</Text>
-                </View>
-                <Pressable style={[styles.qtyButton, styles.plus]}
-                           onPress={() => setQty(qty + 1)}>
-                    <AntDesign name="pluscircle" size={18} color="white"/>
-                </Pressable>
-            </View>
+            <CCNumberSelector value={qty} onChangeValue={setQty}/>
             <CCButton title="Add to Cart" type="primary"
                       onPress={handleAddToCart}/>
         </ScrollView>
@@ -97,38 +84,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#888',
         marginBottom: 16,
-    },
-    qtyContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-    },
-    qtyButton: {
-        width: 40,
-        backgroundColor: colors.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 40
-    },
-    plus: {
-        borderBottomRightRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    minus: {
-        borderBottomLeftRadius: 10,
-        borderTopLeftRadius: 10,
-    },
-    qty: {
-        color: colors.background,
-        textAlign: 'center',
-    },
-    qtyValueContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        flex: 1,
-        backgroundColor: colors.textPrimary,
-        height: 40
     }
 });
 

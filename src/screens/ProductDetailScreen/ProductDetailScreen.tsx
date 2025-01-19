@@ -1,33 +1,18 @@
 import React, {useState} from 'react';
 import {
-    View,
     Text,
     Image,
-    StyleSheet,
-    Button,
-    Alert,
-    Pressable, ScrollView
+    ScrollView
 } from 'react-native';
-import {addToCart} from '../reducers/cart';
+import {addToCart} from '../../reducers/cart';
 import {useDispatch} from "react-redux";
-import colors from "../config/theme";
-import typography from "../config/typography";
-import CCButton from "../components/button";
-import {useAlert} from "../components/alert";
-import {AntDesign} from "@expo/vector-icons";
-import CCNumberSelector from "../components/numberSelector";
-
-interface ProductDetailScreenProps {
-    route: {
-        params: {
-            id: number;
-            title: string;
-            price: number;
-            description: string;
-            image: string;
-        };
-    };
-}
+import colors from "../../config/theme";
+import typography from "../../config/typography";
+import CCButton from "../../components/button/button";
+import {useAlert} from "../../components/alert/alert";
+import CCNumberSelector from "../../components/numberSelector/numberSelector";
+import {ProductDetailScreenProps} from "./ProductDetailScreen.types";
+import styles from "./ProductDetailScreen.styles";
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({route}: any) => {
     const {id, title, price, description, image} = route.params;
@@ -58,34 +43,5 @@ const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({route}: any) =
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: colors.background,
-    },
-    image: {
-        width: '100%',
-        height: 200,
-        resizeMode: 'contain',
-        marginBottom: 16,
-    },
-    title: {
-        fontSize: 20,
-        marginBottom: 8,
-        color: colors.textPrimary,
-    },
-    price: {
-        fontSize: 20,
-        color: colors.secondary,
-        marginBottom: 8,
-    },
-    description: {
-        fontSize: 16,
-        color: '#888',
-        marginBottom: 16,
-    }
-});
 
 export default ProductDetailScreen;

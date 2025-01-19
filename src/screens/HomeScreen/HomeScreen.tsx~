@@ -8,9 +8,9 @@ import {
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native';
-import typography from "../config/typography";
-import colors from "../config/theme";
-import SplashScreen from "./SplashScreen";
+import typography from "../../config/typography";
+import colors from "../../config/theme";
+import SplashScreen from "../SplashScreen/SplashScreen";
 
 interface Product {
     id: number;
