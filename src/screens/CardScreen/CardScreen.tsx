@@ -20,6 +20,7 @@ import CCModal from "../../components/modal/modal";
 import styles from "./CardScreen.styles";
 import {CardScreenProps} from "./CardScreen.types";
 
+// Constants for card icons
 const CARD_ICONS: Record<string, any> = {
     visa: require('../../../assets/visa.png'),
     mastercard: require('../../../assets/mastercard.png'),
@@ -27,6 +28,7 @@ const CARD_ICONS: Record<string, any> = {
 };
 
 const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
+    // State variables for card details and form data
     const [cardNumber, setCardNumber] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
     const [cvv, setCvvValue] = useState('');
@@ -39,13 +41,22 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
     const {showAlert} = useAlert();
     const dispatch = useDispatch();
 
+    /**
+     * Gets the type of credit card based on its number.
+     * @param cardNumber Credit card number.
+     * @returns Credit card type (visa, mastercard, amex) or an empty string.
+     */
     const getCardType = (cardNumber: string) => {
         if (/^4[0-9]{0,}$/.test(cardNumber)) return 'visa';
         if (/^5[1-5][0-9]{0,}$/.test(cardNumber)) return 'mastercard';
         if (/^3[47][0-9]{0,}$/.test(cardNumber)) return 'amex';
         return '';
     };
-
+    /**
+     * Formats the credit card number, adding spaces every 4 digits.
+     * @param value Credit card number to be formatted.
+     * @returns Credit card nunber formatted with spaces.
+     */
     const formatCardNumber = (value: string) => {
         return value
             .replace(/\D/g, '')
@@ -60,6 +71,10 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
         setModalVisible(!isModalVisible);
     };
 
+    /**
+     * Format the expiration date to MM/YY.
+     * @param value Expiration date to be formatted.
+     */
     const formatExpirationDate = (value: string) => {
         if (expirationDate.length < value.length) {
             setExpirationDate(value
@@ -71,6 +86,10 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
         }
     };
 
+    /**
+     * Validates the form data and either shows the modal or saves the card.
+     * @param type Type of validation (modal or save).
+     */
     const validateForm = (type: string) => {
         if (cardType !== "" && cardNumber.length === 19 && expirationDate.length === 5 && cvv.length === 3) {
             const expirationDateSplitted = expirationDate.split('/');
@@ -95,6 +114,10 @@ const AddCardScreen: React.FC<CardScreenProps> = ({route, navigation}: any) => {
             });
         }
     }
+    /**
+     * Saves the credit card data in the local storage.
+     * @throws Error if the test error is thrown.
+     */
     const saveCard = async () => {
         setLoading(true);
         try {

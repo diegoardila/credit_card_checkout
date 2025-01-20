@@ -15,11 +15,21 @@ import {ProductDetailScreenProps} from "./ProductDetailScreen.types";
 import styles from "./ProductDetailScreen.styles";
 
 const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({route}: any) => {
+    // Destructure product details from the route parameters
     const {id, title, price, description, image} = route.params;
+    // Initialize Redux dispatch
     const dispatch = useDispatch();
     const {showAlert} = useAlert();
+    // State to manage the quantity of the product to add to the cart
     const [qty, setQty] = useState(1);
 
+    /**
+     * Adds the selected product to the cart with the specified quantity.
+     * Displays a success alert upon completion.
+     *
+     * @async
+     * @returns {Promise<void>} Resolves when the product has been added to the cart and the alert is shown.
+     */
     const handleAddToCart = async () => {
         dispatch(addToCart({id, title, price, description, image, qty: qty}));
         showAlert({

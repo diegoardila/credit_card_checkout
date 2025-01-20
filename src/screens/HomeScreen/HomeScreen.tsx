@@ -13,10 +13,13 @@ import {useAlert} from "../../components/alert/alert";
 import {Product} from "./HomeScreen.types";
 
 const HomeScreen: React.FC = ({navigation}: any) => {
+    // State for storing the fetched products
     const [products, setProducts] = useState<Product[]>([]);
+    // State to track loading status
     const [loading, setLoading] = useState(true);
     const {showAlert} = useAlert();
 
+    //Fetches the list of products from a remote API and updates the state.
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -36,6 +39,7 @@ const HomeScreen: React.FC = ({navigation}: any) => {
         fetchProducts();
     }, []);
 
+    // Show a splash screen while data is being fetched
     if (loading) {
         return (
             <SplashScreen/>

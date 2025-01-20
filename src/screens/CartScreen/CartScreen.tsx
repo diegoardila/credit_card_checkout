@@ -16,12 +16,28 @@ import styles from "./CartScreen.styles";
 
 const CartScreen: React.FC = ({navigation}: any) => {
     const dispatch = useDispatch();
+    //Selector to retrieve cart items from the Redux store.
     const cartItems = useSelector((state: RootState) => state.cart.items);
     let cartTotal = 0;
+    /**
+     * Calculates the total price of all items in the cart.
+     * @type {number} The total cost of items in the cart.
+     */
     cartItems.forEach((item) => cartTotal += item.price);
+
+    /**
+     * Clears all items from the cart.
+     * Dispatches the `clearCart` action.
+     */
     const handleClearCart = async () => {
         dispatch(clearCart());
     };
+
+    /**
+     * Removes a specific item from the cart.
+     * Dispatches the `removeFromCart` action with the item ID.
+     * @param id {number} The ID of the item to be removed.
+     */
     const handleRemoveItemFromCart = async (id: number) => {
         dispatch(removeFromCart(id));
     };
