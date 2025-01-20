@@ -13,7 +13,13 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Start the app in android
 
    ```bash
-   npx expo start --android
+   npm run android
+   ```
+
+2. Apk build located at root directory named as
+
+   ```bash
+   app(credit-card-checkout).apk
    ```
 
 In the output, you'll find options to open the app in a
