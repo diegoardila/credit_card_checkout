@@ -14,6 +14,7 @@ import {FontAwesome} from "@expo/vector-icons";
 import styles from "./SpashScreen.styles";
 
 const SplashScreen: React.FC = ({navigation}: any) => {
+    // Loading custom fonts
     const [fontsLoaded] = useFonts({
         'poppins-regular': require('../../../assets/fonts/Poppins-Regular.ttf'),
         'poppins-medium': require('../../../assets/fonts/Poppins-Medium.ttf'),
@@ -22,12 +23,16 @@ const SplashScreen: React.FC = ({navigation}: any) => {
         'poppins-black': require('../../../assets/fonts/Poppins-Black.ttf'),
         'poppins-italic': require('../../../assets/fonts/Poppins-Italic.ttf'),
     });
+    // Getting the dispatch function to send actions to the Redux store
     const dispatch = useDispatch();
+    // Animated values for the curtain and icon animations
     const positionCurtain = useRef(new Animated.Value(200)).current;
     const positionIcon = useRef(new Animated.Value(-36)).current;
+    // Utility function to add a delay
     const delay =
         (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+    // Effect to animate the curtain movement
     useEffect(() => {
         Animated.loop(
             Animated.sequence([
@@ -46,6 +51,7 @@ const SplashScreen: React.FC = ({navigation}: any) => {
         ).start();
     }, [positionCurtain]);
 
+    // Effect to animate the icon movement
     useEffect(() => {
         Animated.loop(
             Animated.sequence([
@@ -66,7 +72,7 @@ const SplashScreen: React.FC = ({navigation}: any) => {
 
     }, [positionIcon]);
 
-
+    // Effect to check the network connection and navigate accordingly
     useEffect(() => {
         const checkConnection = async () => {
             const state = await NetInfo.fetch();

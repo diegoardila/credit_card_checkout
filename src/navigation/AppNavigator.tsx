@@ -4,16 +4,14 @@ import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ProductDetailScreen from "../screens/ProductDetailScreen/ProductDetailScreen";
 import CartScreen from "../screens/CartScreen/CartScreen";
-import {Button, Pressable, Text, View} from "react-native";
+import {Pressable, Text, View} from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
 import AddCardScreen from "../screens/CardScreen/CardScreen";
-import Constants from "expo-constants";
 import colors from "../config/theme";
 import typography from "../config/typography";
 import {Entypo, FontAwesome5} from "@expo/vector-icons";
-import {color} from "nativewind/dist/tailwind/color";
-import {white} from "nativewind/dist/metro/picocolors";
+import styles from "./AppNavigator.styles";
 
 const Stack = createStackNavigator();
 
@@ -22,12 +20,7 @@ const AppNavigator: React.FC = () => {
     let cartItemsCount = 0;
     cartItems.forEach((item) => cartItemsCount += item.qty);
     return (
-        <View style={{
-            flex: 1,
-            paddingTop: Constants.statusBarHeight,
-            paddingHorizontal: 15,
-            backgroundColor: colors.background
-        }}>
+        <View style={styles.container}>
             <NavigationContainer>
                 <Stack.Navigator screenOptions={({navigation}) => ({
                     headerRight: () => (
@@ -43,19 +36,7 @@ const AppNavigator: React.FC = () => {
                                 <FontAwesome5 name="shopping-cart" size={24}
                                               color={cartItemsCount == 0 ? "gray" : "white"}/>
                             </Pressable>
-                            {cartItemsCount > 0 && <View style={{
-                                position: 'absolute',
-                                right: 0,
-                                top: 0,
-                                backgroundColor: colors.error,
-                                width: 15,
-                                height: 15,
-                                borderRadius: 10,
-                                alignItems: 'center',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-
-                            }}>
+                            {cartItemsCount > 0 && <View style={styles.cartButton}>
                                 <Text
                                     style={[typography.textMedium0, {
                                         color: colors.textPrimary,
